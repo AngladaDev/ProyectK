@@ -15,6 +15,9 @@ GameObject:
   - component: {fileID: 5025315574545312385}
   - component: {fileID: 3348832431454899136}
   - component: {fileID: 6373684429731977558}
+  - component: {fileID: 1347851948181806624}
+  - component: {fileID: 6060296079401427029}
+  - component: {fileID: 8586195814241800866}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -123,12 +126,12 @@ NavMeshAgent:
   m_GameObject: {fileID: 1242886560847838096}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1
+  m_Radius: 0.5
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -160,9 +163,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d84f2b6b15884488e2fdc151b36ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ground:
+  groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  isCommanded: 0
+--- !u!114 &1347851948181806624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242886560847838096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ff49bc4d0adff94b8f20cd803f00091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+--- !u!95 &6060296079401427029
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242886560847838096}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a9396017eba7ceb488a9dae6004f9d06, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!135 &8586195814241800866
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242886560847838096}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 10
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8351073969288005451
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 /// <summary>
@@ -46,6 +47,11 @@ public class UnitSelectionController : MonoBehaviour
     public LayerMask clickable;
 
     /// <summary>
+    /// Layer mask used to identify attackable objects.
+    /// </summary>
+    public LayerMask attackable;
+
+    /// <summary>
     /// Layer mask used to identify valid ground for move commands.
     /// </summary>
     public LayerMask ground;
@@ -54,6 +60,8 @@ public class UnitSelectionController : MonoBehaviour
     /// GameObject used to visually mark the destination of a move command.
     /// </summary>
     public GameObject groundMarker;
+
+    public bool enableAttackCursor;
 
     #endregion
 
@@ -67,13 +75,14 @@ public class UnitSelectionController : MonoBehaviour
 
     private void Start()
     {
-        cam = Camera.main;   
+        cam = Camera.main;
     }
 
     private void Update()
     {
         HandleSelectionInput();
         HandleMovementMarker();
+        HandleSelectionMode();
     }
 
     #endregion
@@ -119,11 +128,9 @@ public class UnitSelectionController : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground))
             {
+                //Enable the Ground Maker UI
                 groundMarker.transform.position = hit.point;
-
-                // Reactivate marker to trigger animation/FX again
-                groundMarker.SetActive(false);
-                groundMarker.SetActive(true);
+                StartCoroutine(EnableGroundMarker(hit.point, 1f));
             }
         }
     }
@@ -175,8 +182,43 @@ public class UnitSelectionController : MonoBehaviour
         }
 
         groundMarker.SetActive(false);
-        
+
         selectedUnits.Clear();
+    }
+
+    #endregion
+
+    #region Attack
+
+    private void HandleSelectionMode()
+    {
+        if (selectedUnits.Count > 0 && AtleastOffensiveUnit(selectedUnits))
+        {
+            RaycastHit hit;
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, attackable))
+            {
+                Debug.Log("Enemy Hovered with mouse");
+                enableAttackCursor = true;
+                if (Input.GetMouseButtonDown(1))
+                {
+                    Transform targetEnemy = hit.transform;
+
+                    foreach (GameObject unit in selectedUnits)
+                    {
+                        if (unit.GetComponent<AttackController>())
+                        {
+                            unit.GetComponent<AttackController>().target = targetEnemy;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                enableAttackCursor = false;
+            }
+        }
     }
 
     #endregion
@@ -200,6 +242,33 @@ public class UnitSelectionController : MonoBehaviour
     {
         EnableMovement(unit, isSelected);
         ShowSelectionIndicator(unit, isSelected);
+    }
+
+    // This check if in the list there are a lest one offensive unit !! IMPORTANT THIS FUCTION MAY CHANGE IN THE FUTURE I DONT KNOW IF I WILL HAVE NON OFFENSIVE UNITS !!
+    private bool AtleastOffensiveUnit(List<GameObject> unitList)
+    {
+        foreach (GameObject unit in unitList)
+        {
+            if (unit.GetComponent<AttackController>())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Shows the ground marker at the given position for a limited time
+    private System.Collections.IEnumerator EnableGroundMarker(Vector3 position, float duration)
+    {
+        groundMarker.transform.position = position;
+
+        // Reactivate to reset any animation/FX
+        groundMarker.SetActive(false);
+        groundMarker.SetActive(true);
+
+        yield return new WaitForSeconds(duration);
+
+        groundMarker.SetActive(false);
     }
 
     #endregion
