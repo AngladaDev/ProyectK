@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 /// <summary>
@@ -75,7 +72,17 @@ public class UnitSelectionController : MonoBehaviour
 
     private void Update()
     {
-        // Handle left-click for selection
+        HandleSelectionInput();
+        HandleMovementMarker();
+    }
+
+    #endregion
+
+    #region Input Handlers
+
+    // Handles unit selection via left click
+    private void HandleSelectionInput()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
@@ -100,8 +107,11 @@ public class UnitSelectionController : MonoBehaviour
                 }
             }
         }
+    }
 
-        // Handle right-click to place movement marker
+    // Handles placing the movement marker via right click
+    private void HandleMovementMarker()
+    {
         if (Input.GetMouseButtonDown(1) && selectedUnits.Count > 0)
         {
             RaycastHit hit;
@@ -111,7 +121,7 @@ public class UnitSelectionController : MonoBehaviour
             {
                 groundMarker.transform.position = hit.point;
 
-                // Disable and re-enable for visual animation reset
+                // Reactivate marker to trigger animation/FX again
                 groundMarker.SetActive(false);
                 groundMarker.SetActive(true);
             }
@@ -128,35 +138,40 @@ public class UnitSelectionController : MonoBehaviour
         DeselectAll();
 
         selectedUnits.Add(unit);
-
-        ShowSelectionIndicator(unit, true);
-        EnableMovement(unit, true);
+        HandleSelection(unit, true);
     }
 
     // Adds or removes a unit from the multi-selection list
     private void MultiSelect(GameObject unit)
     {
-        if (selectedUnits.Contains(unit) == false)
+        if (!selectedUnits.Contains(unit))
         {
             selectedUnits.Add(unit);
-            ShowSelectionIndicator(unit, true);
-            EnableMovement(unit, true);
+            HandleSelection(unit, true);
         }
         else
         {
-            EnableMovement(unit, false);
-            ShowSelectionIndicator(unit, false);
+            HandleSelection(unit, false);
             selectedUnits.Remove(unit);
         }
     }
 
+    // Adds units selected by drag box (multi-drag)
+    internal void DragSelect(GameObject unit)
+    {
+        if (!selectedUnits.Contains(unit))
+        {
+            selectedUnits.Add(unit);
+            HandleSelection(unit, true);
+        }
+    }
+
     // Deselects all currently selected units
-    private void DeselectAll()
+    internal void DeselectAll()
     {
         foreach (var unit in selectedUnits)
         {
-            EnableMovement(unit, false);
-            ShowSelectionIndicator(unit, false);
+            HandleSelection(unit, false);
         }
 
         groundMarker.SetActive(false);
@@ -180,6 +195,12 @@ public class UnitSelectionController : MonoBehaviour
         unit.transform.GetChild(0).gameObject.SetActive(isVisible);
     }
 
+    // Handles visual and logic for selection/deselection
+    private void HandleSelection(GameObject unit, bool isSelected)
+    {
+        EnableMovement(unit, isSelected);
+        ShowSelectionIndicator(unit, isSelected);
+    }
+
     #endregion
 }
-
