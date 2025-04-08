@@ -65,6 +65,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a91f837461c80bf4eba14cf2140aa5d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1101 &-4760482622824428704
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: isAttack
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 9048704046126277281}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.2
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
+--- !u!1101 &-3805889898661800541
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: isAttack
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 853625199432940708}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.2
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -117,6 +167,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -7040683210388990210}
+  - {fileID: -4760482622824428704}
   m_StateMachineBehaviours:
   - {fileID: 1065651051527785146}
   m_Position: {x: 50, y: 50, z: 0}
@@ -146,6 +197,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackingDistance: 1
+--- !u!114 &1390803758761021380
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 767aa3b8cdb27a445ac1ea328fa18dd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stopAttackingDistante: 1.2
 --- !u!1102 &1589486530668383501
 AnimatorState:
   serializedVersion: 6
@@ -209,8 +273,10 @@ AnimatorState:
   m_Name: Attack State
   m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_Transitions:
+  - {fileID: -3805889898661800541}
+  m_StateMachineBehaviours:
+  - {fileID: 1390803758761021380}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
